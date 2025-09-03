@@ -55,7 +55,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "solid-tiny-context": "^0.1.5",
+    "solid-tiny-context": "^0.2.1",
     "solid-tiny-utils": "^0.6.0"
   }
 }

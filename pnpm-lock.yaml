@@ -12,8 +12,8 @@ importers:
         specifier: ^1.9.7
         version: 1.9.7
       solid-tiny-context:
-        specifier: ^0.1.5
-        version: 0.1.5(solid-js@1.9.7)
+        specifier: ^0.2.1
+        version: 0.2.1(solid-js@1.9.7)
       solid-tiny-utils:
         specifier: ^0.6.0
         version: 0.6.0(solid-js@1.9.7)
@@ -1562,8 +1562,8 @@ packages:
     peerDependencies:
       solid-js: ^1.9.7
 
-  solid-tiny-context@0.1.5:
-    resolution: {integrity: sha512-ycaWcUUYYFWX2QQRrUfY4cPB7ASpmEewxNXhTpU6YT/SkgfmhVMIo/ANDgvLF6f10hltrW8ldoOSXxkLH38jJA==}
+  solid-tiny-context@0.2.1:
+    resolution: {integrity: sha512-okbP6FkzhFJhIoZ+2RdyxpHmJKL2d1OAfo3jJWqRc+3Ku3Ts9aEXhtIgJ5rXPVTZ+H3Np2m+/seR0KZNwKmxpA==}
     peerDependencies:
       solid-js: ^1.9.7
 
@@ -3418,7 +3418,7 @@ snapshots:
     dependencies:
       solid-js: 1.9.7
 
-  solid-tiny-context@0.1.5(solid-js@1.9.7):
+  solid-tiny-context@0.2.1(solid-js@1.9.7):
     dependencies:
       solid-js: 1.9.7
       solid-tiny-utils: 0.6.0(solid-js@1.9.7)

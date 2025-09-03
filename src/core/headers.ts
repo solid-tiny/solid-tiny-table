@@ -1,5 +1,4 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
-/** biome-ignore-all lint/correctness/noUnusedVariables: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: e */
 import type { ColumnDef } from '../types/column-def';
 import type {
   SolidTinyTableColumn,
@@ -8,13 +7,13 @@ import type {
 } from '../types/core';
 import type { RowData } from '../types/row';
 
-export type CoreHeader<TData, TValue> = {
+export interface CoreHeader<_TData, _TValue> {
   rowSpan: number;
   colSpan: number;
   depth: number;
-};
+}
 
-export interface HeaderContext<TData, TValue> {
+export interface HeaderContext<TData extends RowData, TValue> {
   /**
    * An instance of a column.
    */
@@ -29,7 +28,7 @@ export interface HeaderContext<TData, TValue> {
   table: SolidTinyTableInstance<TData>;
 }
 
-function getMaxDepth<T, V>(cols: ColumnDef<T, V>[]): number {
+function getMaxDepth<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
   return cols.reduce((depth, col) => {
     if ('columns' in col && col.columns) {
       return Math.max(depth, 1 + getMaxDepth(col.columns));
@@ -38,7 +37,7 @@ function getMaxDepth<T, V>(cols: ColumnDef<T, V>[]): number {
   }, 0);
 }
 
-function countLeaves<T, V>(cols: ColumnDef<T, V>[]): number {
+function countLeaves<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
   return cols.reduce((count, col) => {
     if ('columns' in col && col.columns) {
       return count + countLeaves(col.columns);
@@ -70,18 +69,17 @@ export function makeHeaders<TData extends RowData>(
         const cell: CoreHeader<TData, any> = {
           depth,
           colSpan: leafCount,
-          rowSpan: 1, // group 只占一行
+          rowSpan: 1,
         };
         headers[depth].push(cell);
 
         // biome-ignore lint/style/noNonNullAssertion: is safe here
         traverse(col.columns!, depth + 1, headers[depth]);
       } else {
-        // 叶子列
         const cell: CoreHeader<TData, any> = {
           depth,
           colSpan: 1,
-          rowSpan: maxDepth - depth, // 向下撑满
+          rowSpan: maxDepth - depth,
         };
         headers[depth].push(cell);
       }

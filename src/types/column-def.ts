@@ -25,7 +25,7 @@ export type ColumnDefTemplate<TProps extends object> =
   | string
   | ((props: TProps) => any);
 
-export type StringOrTemplateHeader<TData, TValue> =
+export type StringOrTemplateHeader<TData extends RowData, TValue> =
   | string
   | ColumnDefTemplate<HeaderContext<TData, TValue>>;
 
