@@ -33,25 +33,28 @@ export default function CreateColumnHelper() {
 
   const columns = [
     helper.accessor('name', {
-      header: 'Name',
+      header: () => <strong>Name</strong>,
+      meta: {
+        info: 'The name of the person',
+      },
     }),
     helper.accessor('age', {
-      header: 'Age',
+      header: () => <strong>Age</strong>,
     }),
     helper.accessor('email', {
-      header: 'Email',
+      header: () => <strong>Email</strong>,
     }),
     helper.group({
-      header: 'Address',
+      header: 'address',
       columns: [
         helper.accessor('address.street', {
-          cell: 'hhh',
+          header: () => <strong>Street</strong>,
         }),
         helper.accessor('address.city', {
-          cell: 'iii',
+          header: () => <strong>City</strong>,
         }),
         helper.accessor('address.country', {
-          cell: 'jjj',
+          header: () => <strong>Country</strong>,
         }),
       ],
     }),
@@ -79,7 +82,7 @@ export default function CreateColumnHelper() {
                       colSpan={cell.colSpan}
                       rowSpan={cell.rowSpan}
                     >
-                      {cell.depth}
+                      {cell.renderHeader()}
                     </td>
                   )}
                 </For>

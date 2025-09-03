@@ -1,16 +1,17 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: e */
+import type { JSX } from 'solid-js/jsx-runtime';
+import { isFn, isString } from 'solid-tiny-utils';
 import type { ColumnDef } from '../types/column-def';
-import type {
-  SolidTinyTableColumn,
-  SolidTinyTableHeader,
-  SolidTinyTableInstance,
-} from '../types/core';
+import type { SolidTinyTableColumn, SolidTinyTableHeader } from '../types/core';
 import type { RowData } from '../types/row';
+import { getValueAtPath } from '../utils/object';
 
-export interface CoreHeader<_TData, _TValue> {
+export interface CoreHeader<TData extends RowData, TValue> {
   rowSpan: number;
   colSpan: number;
   depth: number;
+  renderHeader: () => JSX.Element;
+  column: SolidTinyTableColumn<TData, TValue>;
 }
 
 export interface HeaderContext<TData extends RowData, TValue> {
@@ -22,10 +23,6 @@ export interface HeaderContext<TData extends RowData, TValue> {
    * An instance of a header.
    */
   header: SolidTinyTableHeader<TData, TValue>;
-  /**
-   * The table instance.
-   */
-  table: SolidTinyTableInstance<TData>;
 }
 
 function getMaxDepth<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
@@ -63,25 +60,40 @@ export function makeHeaders<TData extends RowData>(
     for (const col of cols) {
       const isGroup = 'columns' in col && Array.isArray(col.columns);
 
+      const h = {} as CoreHeader<TData, any>;
+
+      h.column = {
+        columnDef: col,
+      };
+      h.renderHeader = () => {
+        if (isString(col.header)) {
+          return col.header;
+        }
+        if (isFn(col.header)) {
+          return col.header({
+            header: h,
+            column: h.column,
+          });
+        }
+
+        return getValueAtPath(col, 'accessorKey') || '-';
+      };
+
       if (isGroup) {
         // biome-ignore lint/style/noNonNullAssertion: is safe here
         const leafCount = countLeaves(col.columns!);
-        const cell: CoreHeader<TData, any> = {
-          depth,
-          colSpan: leafCount,
-          rowSpan: 1,
-        };
-        headers[depth].push(cell);
+        h.depth = depth;
+        h.colSpan = leafCount;
+        h.rowSpan = 1;
+        headers[depth].push(h);
 
         // biome-ignore lint/style/noNonNullAssertion: is safe here
         traverse(col.columns!, depth + 1, headers[depth]);
       } else {
-        const cell: CoreHeader<TData, any> = {
-          depth,
-          colSpan: 1,
-          rowSpan: maxDepth - depth,
-        };
-        headers[depth].push(cell);
+        h.depth = depth;
+        h.colSpan = 1;
+        h.rowSpan = maxDepth - depth;
+        headers[depth].push(h);
       }
     }
   }

@@ -10,9 +10,11 @@ import { getValueAtPath } from '../utils/object';
 
 export type CoreColumn<TData extends RowData, TValue> = {
   accessorFn?: AccessorFn<TData, TValue>;
+  columnDef: ColumnDef<TData, TValue>;
 };
 
 export type CoreRow<TData extends RowData, TValue = unknown> = {
+  original: TData;
   getCells: () => CoreCell<TData, TValue>[];
 };
 
@@ -83,7 +85,7 @@ export function makeRows<TData extends RowData, TValue>(
       const col = normalizeColumnDef(rowData, column);
       return { getValue: col.getValue, renderCell: col.render };
     });
-    return { getCells: () => cells };
+    return { getCells: () => cells, original: rowData };
   });
   return rows;
 }
