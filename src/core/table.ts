@@ -33,8 +33,7 @@ export function createTable<TData extends RowData>(params: {
         data,
         columns,
       });
-    },
-    { defer: true }
+    }
   );
 
   return {
