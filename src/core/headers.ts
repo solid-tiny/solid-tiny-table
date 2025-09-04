@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: e */
 import type { JSX } from 'solid-js/jsx-runtime';
-import { isFn, isString } from 'solid-tiny-utils';
+import { isArray, isFn, isString } from 'solid-tiny-utils';
 import type { ColumnDef } from '../types/column-def';
 import type { SolidTinyTableColumn, SolidTinyTableHeader } from '../types/core';
 import type { RowData } from '../types/row';
@@ -12,6 +12,7 @@ export interface CoreHeader<TData extends RowData, TValue> {
   depth: number;
   renderHeader: () => JSX.Element;
   column: SolidTinyTableColumn<TData, TValue>;
+  isLeaf: boolean;
 }
 
 export interface HeaderContext<TData extends RowData, TValue> {
@@ -58,7 +59,8 @@ export function makeHeaders<TData extends RowData>(
     }
 
     for (const col of cols) {
-      const isGroup = 'columns' in col && Array.isArray(col.columns);
+      const isGroup =
+        'columns' in col && isArray(col.columns) && col.columns.length > 0;
 
       const h = {} as CoreHeader<TData, any>;
 
@@ -85,6 +87,7 @@ export function makeHeaders<TData extends RowData>(
         h.depth = depth;
         h.colSpan = leafCount;
         h.rowSpan = 1;
+        h.isLeaf = false;
         headers[depth].push(h);
 
         // biome-ignore lint/style/noNonNullAssertion: is safe here
@@ -93,6 +96,7 @@ export function makeHeaders<TData extends RowData>(
         h.depth = depth;
         h.colSpan = 1;
         h.rowSpan = maxDepth - depth;
+        h.isLeaf = true;
         headers[depth].push(h);
       }
     }

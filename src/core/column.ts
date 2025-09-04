@@ -5,11 +5,11 @@ import type {
   ColumnDef,
   DisplayColumnDef,
 } from '../types/column-def';
-import type { AccessorFn, RowData } from '../types/row';
+import type { RowData } from '../types/row';
 import { getValueAtPath } from '../utils/object';
+import type { CoreHeader } from './headers';
 
 export type CoreColumn<TData extends RowData, TValue> = {
-  accessorFn?: AccessorFn<TData, TValue>;
   columnDef: ColumnDef<TData, TValue>;
 };
 
@@ -30,7 +30,8 @@ export type NormalizedColumnDef<TValue = unknown> = {
 
 export function normalizeColumnDef<TData extends RowData, TValue>(
   data: TData,
-  columnDef: DisplayColumnDef<TData, TValue> | AccessorColumnDef<TData, TValue>
+  columnDef: DisplayColumnDef<TData, TValue> | AccessorColumnDef<TData, TValue>,
+  row: CoreRow<TData, TValue>
 ): NormalizedColumnDef<TValue> {
   const getValue = () => {
     if ('accessorKey' in columnDef && isString(columnDef.accessorKey)) {
@@ -48,7 +49,7 @@ export function normalizeColumnDef<TData extends RowData, TValue>(
     }
 
     if (isFn(columnDef.cell)) {
-      return columnDef.cell({ value: getValue });
+      return columnDef.cell({ getValue, row, column: { columnDef } });
     }
 
     return getValue();
@@ -62,30 +63,29 @@ export function normalizeColumnDef<TData extends RowData, TValue>(
 
 export function makeRows<TData extends RowData, TValue>(
   data: TData[],
-  columnDefs: ColumnDef<TData, TValue>[]
+  headers: CoreHeader<TData, TValue>[][]
 ) {
-  const getLeafColumns = (colDefs: ColumnDef<TData, TValue>[]) => {
-    const leafColumns: (
-      | DisplayColumnDef<TData, TValue>
-      | AccessorColumnDef<TData, TValue>
-    )[] = [];
-    for (const column of colDefs) {
-      if ('columns' in column && column.columns?.length) {
-        leafColumns.push(...getLeafColumns(column.columns));
-      } else {
-        leafColumns.push(column);
-      }
-    }
+  type NoneGroupDef =
+    | DisplayColumnDef<TData, TValue>
+    | AccessorColumnDef<TData, TValue>;
+  const getLeafColumns = () => {
+    const leafColumns = headers
+      .flat()
+      .filter((h) => h.isLeaf)
+      .map((h) => h.column.columnDef as NoneGroupDef);
     return leafColumns;
   };
 
-  const leafColumns = getLeafColumns(columnDefs);
+  const leafColumns = getLeafColumns();
   const rows: CoreRow<TData>[] = data.map((rowData) => {
-    const cells: CoreCell<TData>[] = leafColumns.map((column) => {
-      const col = normalizeColumnDef(rowData, column);
+    const row = {} as CoreRow<TData, TValue>;
+    const cells: CoreCell<TData, TValue>[] = leafColumns.map((column) => {
+      const col = normalizeColumnDef(rowData, column, row);
       return { getValue: col.getValue, renderCell: col.render };
     });
-    return { getCells: () => cells, original: rowData };
+    row.getCells = () => cells;
+    row.original = rowData;
+    return row;
   });
   return rows;
 }

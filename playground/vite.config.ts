@@ -15,7 +15,7 @@ export default defineConfig({
     modules: false,
   },
   server: {
-    port: 5010,
+    port: 5022,
   },
   plugins: [
     UnoCSS(),

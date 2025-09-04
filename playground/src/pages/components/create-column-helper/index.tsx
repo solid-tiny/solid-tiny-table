@@ -38,6 +38,12 @@ export default function CreateColumnHelper() {
         info: 'The name of the person',
       },
     }),
+    helper.display({
+      id: 'info',
+      header: () => <strong>Info</strong>,
+      cell: (info) =>
+        `${info.row.original.name} (${info.row.original.age} years old)`,
+    }),
     helper.accessor('age', {
       header: () => <strong>Age</strong>,
     }),
@@ -79,6 +85,9 @@ export default function CreateColumnHelper() {
                   {(cell) => (
                     <td
                       class="b b-solid b-gray-200"
+                      classList={{
+                        'bg-gray-100': cell.isLeaf,
+                      }}
                       colSpan={cell.colSpan}
                       rowSpan={cell.rowSpan}
                     >

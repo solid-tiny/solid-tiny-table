@@ -21,7 +21,7 @@ export function createTable<TData extends RowData>(params: {
         return makeHeaders(this.state.columns);
       },
       rows() {
-        return makeRows(this.state.data, this.state.columns);
+        return makeRows(this.state.data, this.state.headers);
       },
     },
   });
