@@ -5,6 +5,11 @@ import type {
   ColumnDef,
   DisplayColumnDef,
 } from '../types/column-def';
+import type {
+  SolidTinyTableCell,
+  SolidTinyTableColumn,
+  SolidTinyTableRow,
+} from '../types/core';
 import type { RowData } from '../types/row';
 import { getValueAtPath } from '../utils/object';
 import type { CoreHeader } from './headers';
@@ -15,12 +20,13 @@ export type CoreColumn<TData extends RowData, TValue> = {
 
 export type CoreRow<TData extends RowData, TValue = unknown> = {
   original: TData;
-  getCells: () => CoreCell<TData, TValue>[];
+  getCells: () => SolidTinyTableCell<TData, TValue>[];
 };
 
-export type CoreCell<_TData extends RowData, TValue = unknown> = {
+export type CoreCell<TData extends RowData, TValue = unknown> = {
   getValue: () => TValue;
   renderCell: () => JSX.Element;
+  column: SolidTinyTableColumn<TData, TValue>;
 };
 
 export type NormalizedColumnDef<TValue = unknown> = {
@@ -77,12 +83,18 @@ export function makeRows<TData extends RowData, TValue>(
   };
 
   const leafColumns = getLeafColumns();
-  const rows: CoreRow<TData>[] = data.map((rowData) => {
+  const rows: SolidTinyTableRow<TData>[] = data.map((rowData) => {
     const row = {} as CoreRow<TData, TValue>;
-    const cells: CoreCell<TData, TValue>[] = leafColumns.map((column) => {
-      const col = normalizeColumnDef(rowData, column, row);
-      return { getValue: col.getValue, renderCell: col.render };
-    });
+    const cells: SolidTinyTableCell<TData, TValue>[] = leafColumns.map(
+      (column) => {
+        const col = normalizeColumnDef(rowData, column, row);
+        return {
+          getValue: col.getValue,
+          renderCell: col.render,
+          column: { columnDef: column },
+        };
+      }
+    );
     row.getCells = () => cells;
     row.original = rowData;
     return row;

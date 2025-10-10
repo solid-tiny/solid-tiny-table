@@ -104,7 +104,9 @@ export default function CreateColumnHelper() {
             {(row) => (
               <tr>
                 <For each={row.getCells()}>
-                  {(cell) => <td>{cell.renderCell()}</td>}
+                  {(cell) => {
+                    return <td>{cell.renderCell()}</td>;
+                  }}
                 </For>
               </tr>
             )}

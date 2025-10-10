@@ -30,7 +30,6 @@ export type StringOrTemplateHeader<TData extends RowData, TValue> =
   | ColumnDefTemplate<HeaderContext<TData, TValue>>;
 
 export interface ColumnDefBase<TData extends RowData, TValue = unknown> {
-  getUniqueValues?: AccessorFn<TData, unknown[]>;
   cell?: ColumnDefTemplate<CellContext<TData, TValue>>;
   meta?: ColumnMeta<TData, TValue>;
 }
