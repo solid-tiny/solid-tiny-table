@@ -38,7 +38,8 @@ describe('Headers', () => {
         ],
       }),
     ];
-    const headers = makeHeaders(columns);
+    // biome-ignore lint/suspicious/noExplicitAny: any
+    const headers = makeHeaders(columns, {} as any);
     expect(headers.length).toBe(2);
     expect(headers[0].length).toBe(3);
     expect(headers[1].length).toBe(3);
