@@ -1,21 +1,28 @@
 import { createState } from 'solid-tiny-context';
 import { access, createWatch, type MaybeAccessor } from 'solid-tiny-utils';
 import type { ColumnDef } from '../types/column-def';
-import type { SolidTinyTableInstance } from '../types/core';
+import type { SolidTinyTableInstance, TableStore } from '../types/core';
 import type { RowData } from '../types/row';
 import { makeRows } from './column';
 import { makeHeaders } from './headers';
 
-export function createTable<TData extends RowData>(params: {
+export function createTable<
+  TData extends RowData,
+  TStore extends TableStore,
+>(params: {
   data: MaybeAccessor<TData[]>;
   // biome-ignore lint/suspicious/noExplicitAny: any
   columns: MaybeAccessor<ColumnDef<TData, any>[]>;
-}): SolidTinyTableInstance<TData> {
+  store?: TStore;
+}): SolidTinyTableInstance<TData, TStore> {
   const ctx = createState({
-    state: () => ({
-      data: access(params.data),
-      columns: access(params.columns),
-    }),
+    state: () =>
+      ({
+        ...params.store,
+        data: access(params.data),
+        columns: access(params.columns),
+        // biome-ignore lint/suspicious/noExplicitAny: I can't figure out a better way right now
+      }) as any,
     getters: {
       headers() {
         return makeHeaders(this.state.columns);
@@ -39,5 +46,6 @@ export function createTable<TData extends RowData>(params: {
   return {
     headers: () => ctx[0].headers,
     rows: () => ctx[0].rows,
+    ctx: [ctx[0], ctx[1]],
   };
 }

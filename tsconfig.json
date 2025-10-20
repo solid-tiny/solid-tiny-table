@@ -16,8 +16,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "types": ["@solidjs/testing-library"]
   },
+
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }
