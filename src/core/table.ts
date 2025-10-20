@@ -15,6 +15,8 @@ export function createTable<
   columns: MaybeAccessor<ColumnDef<TData, any>[]>;
   store?: TStore;
 }): SolidTinyTableInstance<TData, TStore> {
+  const table = {} as SolidTinyTableInstance<TData, TStore>;
+
   const ctx = createState({
     state: () =>
       ({
@@ -25,10 +27,10 @@ export function createTable<
       }) as any,
     getters: {
       headers() {
-        return makeHeaders(this.state.columns);
+        return makeHeaders(this.state.columns, table);
       },
       rows() {
-        return makeRows(this.state.data, this.state.headers);
+        return makeRows(this.state.data, this.state.headers, table);
       },
     },
   });
@@ -43,9 +45,9 @@ export function createTable<
     }
   );
 
-  return {
-    headers: () => ctx[0].headers,
-    rows: () => ctx[0].rows,
-    ctx: [ctx[0], ctx[1]],
-  };
+  table.ctx = [ctx[0], ctx[1]];
+  table.rows = () => ctx[0].rows;
+  table.headers = () => ctx[0].headers;
+
+  return table;
 }

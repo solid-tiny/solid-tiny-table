@@ -57,7 +57,12 @@ export default function CreateColumnHelper() {
           header: () => <strong>Street</strong>,
         }),
         helper.accessor('address.city', {
-          header: () => <strong>City</strong>,
+          header: ({ table: t }) => (
+            <strong>
+              City
+              {t.ctx[0].custom}
+            </strong>
+          ),
         }),
         helper.accessor('address.country', {
           header: () => <strong>Country</strong>,
@@ -71,11 +76,21 @@ export default function CreateColumnHelper() {
   const table = createTable({
     data,
     columns,
+    store: {
+      custom: 'value',
+    },
   });
 
   return (
     <div>
-      <Button onClick={() => setData(genPersons())}>Change Data</Button>
+      <Button
+        onClick={() => {
+          setData(genPersons());
+          table.ctx[1].setState('custom', 'new value');
+        }}
+      >
+        Change Data
+      </Button>
       <table class="b-solid w-full border border-gray-200">
         <thead>
           <For each={table.headers()}>

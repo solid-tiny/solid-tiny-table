@@ -8,6 +8,7 @@ import type {
 import type {
   SolidTinyTableCell,
   SolidTinyTableColumn,
+  SolidTinyTableInstance,
   SolidTinyTableRow,
 } from '../types/core';
 import type { RowData } from '../types/row';
@@ -21,6 +22,8 @@ export type CoreColumn<TData extends RowData, TValue> = {
 export type CoreRow<TData extends RowData, TValue = unknown> = {
   original: TData;
   getCells: () => SolidTinyTableCell<TData, TValue>[];
+  // biome-ignore lint/suspicious/noExplicitAny: for any
+  table: SolidTinyTableInstance<TData, any>;
 };
 
 export type CoreCell<TData extends RowData, TValue = unknown> = {
@@ -37,7 +40,9 @@ export type NormalizedColumnDef<TValue = unknown> = {
 export function normalizeColumnDef<TData extends RowData, TValue>(
   data: TData,
   columnDef: DisplayColumnDef<TData, TValue> | AccessorColumnDef<TData, TValue>,
-  row: CoreRow<TData, TValue>
+  row: CoreRow<TData, TValue>,
+  // biome-ignore lint/suspicious/noExplicitAny: for any
+  table: SolidTinyTableInstance<TData, any>
 ): NormalizedColumnDef<TValue> {
   const getValue = () => {
     if ('accessorKey' in columnDef && isString(columnDef.accessorKey)) {
@@ -55,7 +60,7 @@ export function normalizeColumnDef<TData extends RowData, TValue>(
     }
 
     if (isFn(columnDef.cell)) {
-      return columnDef.cell({ getValue, row, column: { columnDef } });
+      return columnDef.cell({ getValue, row, column: { columnDef }, table });
     }
 
     return getValue();
@@ -69,7 +74,9 @@ export function normalizeColumnDef<TData extends RowData, TValue>(
 
 export function makeRows<TData extends RowData, TValue>(
   data: TData[],
-  headers: CoreHeader<TData, TValue>[][]
+  headers: CoreHeader<TData, TValue>[][],
+  // biome-ignore lint/suspicious/noExplicitAny: any
+  table: SolidTinyTableInstance<TData, any>
 ) {
   type NoneGroupDef =
     | DisplayColumnDef<TData, TValue>
@@ -87,7 +94,7 @@ export function makeRows<TData extends RowData, TValue>(
     const row = {} as CoreRow<TData, TValue>;
     const cells: SolidTinyTableCell<TData, TValue>[] = leafColumns.map(
       (column) => {
-        const col = normalizeColumnDef(rowData, column, row);
+        const col = normalizeColumnDef(rowData, column, row, table);
         return {
           getValue: col.getValue,
           renderCell: col.render,
@@ -97,6 +104,7 @@ export function makeRows<TData extends RowData, TValue>(
     );
     row.getCells = () => cells;
     row.original = rowData;
+    row.table = table;
     return row;
   });
   return rows;

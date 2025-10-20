@@ -2,7 +2,11 @@
 import type { JSX } from 'solid-js/jsx-runtime';
 import { isArray, isFn, isString } from 'solid-tiny-utils';
 import type { ColumnDef } from '../types/column-def';
-import type { SolidTinyTableColumn, SolidTinyTableHeader } from '../types/core';
+import type {
+  SolidTinyTableColumn,
+  SolidTinyTableHeader,
+  SolidTinyTableInstance,
+} from '../types/core';
 import type { RowData } from '../types/row';
 import { getValueAtPath } from '../utils/object';
 
@@ -24,6 +28,7 @@ export interface HeaderContext<TData extends RowData, TValue> {
    * An instance of a header.
    */
   header: SolidTinyTableHeader<TData, TValue>;
+  table: SolidTinyTableInstance<TData, any>;
 }
 
 function getMaxDepth<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
@@ -45,7 +50,8 @@ function countLeaves<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
 }
 
 export function makeHeaders<TData extends RowData>(
-  columnDefs: ColumnDef<TData, any>[]
+  columnDefs: ColumnDef<TData, any>[],
+  table: SolidTinyTableInstance<TData, any>
 ): CoreHeader<TData, any>[][] {
   const headers: CoreHeader<TData, any>[][] = [];
   const maxDepth = getMaxDepth(columnDefs);
@@ -75,6 +81,7 @@ export function makeHeaders<TData extends RowData>(
           return col.header({
             header: h,
             column: h.column,
+            table,
           });
         }
 
