@@ -1,6 +1,6 @@
 {
   "name": "solid-tiny-table",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A tiny table data helper for SolidJS.",
   "keywords": [
     "solidjs",
