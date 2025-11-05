@@ -1,10 +1,10 @@
-import { createState } from 'solid-tiny-context';
-import { access, createWatch, type MaybeAccessor } from 'solid-tiny-utils';
-import type { ColumnDef } from '../types/column-def';
-import type { SolidTinyTableInstance, TableStore } from '../types/core';
-import type { RowData } from '../types/row';
-import { makeRows } from './column';
-import { makeHeaders } from './headers';
+import { createState } from "solid-tiny-context";
+import { access, createWatch, type MaybeAccessor } from "solid-tiny-utils";
+import type { ColumnDef } from "../types/column-def";
+import type { SolidTinyTableInstance, TableStore } from "../types/core";
+import type { RowData } from "../types/row";
+import { makeRows } from "./column";
+import { makeHeaders } from "./headers";
 
 export function createTable<
   TData extends RowData,

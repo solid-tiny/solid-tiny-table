@@ -1,25 +1,25 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: e */
-import type { JSX } from 'solid-js/jsx-runtime';
-import { isArray, isFn, isString } from 'solid-tiny-utils';
-import type { ColumnDef } from '../types/column-def';
+import type { JSX } from "solid-js/jsx-runtime";
+import { isArray, isFn, isString } from "solid-tiny-utils";
+import type { ColumnDef } from "../types/column-def";
 import type {
   SolidTinyTableColumn,
   SolidTinyTableHeader,
   SolidTinyTableInstance,
-} from '../types/core';
-import type { RowData } from '../types/row';
-import { getValueAtPath } from '../utils/object';
+} from "../types/core";
+import type { RowData } from "../types/row";
+import { getValueAtPath } from "../utils/object";
 
-export interface CoreHeader<TData extends RowData, TValue> {
+export type CoreHeader<TData extends RowData, TValue> = {
   rowSpan: number;
   colSpan: number;
   depth: number;
   renderHeader: () => JSX.Element;
   column: SolidTinyTableColumn<TData, TValue>;
   isLeaf: boolean;
-}
+};
 
-export interface HeaderContext<TData extends RowData, TValue> {
+export type HeaderContext<TData extends RowData, TValue> = {
   /**
    * An instance of a column.
    */
@@ -29,11 +29,11 @@ export interface HeaderContext<TData extends RowData, TValue> {
    */
   header: SolidTinyTableHeader<TData, TValue>;
   table: SolidTinyTableInstance<TData, any>;
-}
+};
 
 function getMaxDepth<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
   return cols.reduce((depth, col) => {
-    if ('columns' in col && col.columns) {
+    if ("columns" in col && col.columns) {
       return Math.max(depth, 1 + getMaxDepth(col.columns));
     }
     return Math.max(depth, 1);
@@ -42,7 +42,7 @@ function getMaxDepth<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
 
 function countLeaves<T extends RowData, V>(cols: ColumnDef<T, V>[]): number {
   return cols.reduce((count, col) => {
-    if ('columns' in col && col.columns) {
+    if ("columns" in col && col.columns) {
       return count + countLeaves(col.columns);
     }
     return count + 1;
@@ -66,7 +66,7 @@ export function makeHeaders<TData extends RowData>(
 
     for (const col of cols) {
       const isGroup =
-        'columns' in col && isArray(col.columns) && col.columns.length > 0;
+        "columns" in col && isArray(col.columns) && col.columns.length > 0;
 
       const h = {} as CoreHeader<TData, any>;
 
@@ -85,7 +85,7 @@ export function makeHeaders<TData extends RowData>(
           });
         }
 
-        return getValueAtPath(col, 'accessorKey') || '-';
+        return getValueAtPath(col, "accessorKey") || "-";
       };
 
       if (isGroup) {

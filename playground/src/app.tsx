@@ -1,9 +1,9 @@
-import routes from 'virtual:pages';
-import { Router, useCurrentMatches } from '@solidjs/router';
-import type { JSX } from 'solid-js';
-import { createMemo, Suspense } from 'solid-js';
-import { Aside } from './parts/aside';
-import { Header } from './parts/header';
+import routes from "virtual:pages";
+import { Router, useCurrentMatches } from "@solidjs/router";
+import type { JSX } from "solid-js";
+import { createMemo, Suspense } from "solid-js";
+import { Aside } from "./parts/aside";
+import { Header } from "./parts/header";
 
 function RouteWrapper(props: { children: JSX.Element }) {
   const matches = useCurrentMatches();

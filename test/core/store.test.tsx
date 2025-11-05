@@ -1,13 +1,13 @@
 /** biome-ignore-all lint/style/noNonNullAssertion: delete */
-import { fireEvent, render } from '@solidjs/testing-library';
-import { describe, expect, it } from 'vitest';
-import { createTable } from '../../src';
+import { fireEvent, render } from "@solidjs/testing-library";
+import { describe, expect, it } from "vitest";
+import { createTable } from "../../src";
 
 function StoreComponent() {
   const table = createTable({
     data: [],
     columns: [],
-    store: { custom: 'test', customObj: { nested: 'nested value' } },
+    store: { custom: "test", customObj: { nested: "nested value" } },
   });
 
   const [state, { setState }] = table.ctx;
@@ -20,8 +20,8 @@ function StoreComponent() {
         data-testid="update-btn"
         onClick={() =>
           setState({
-            custom: 'changed',
-            customObj: { nested: 'changed value' },
+            custom: "changed",
+            customObj: { nested: "changed value" },
           })
         }
         type="button"
@@ -44,21 +44,21 @@ function StoreComponent() {
   );
 }
 
-describe('Store', () => {
-  it('create table with custom store', () => {
+describe("Store", () => {
+  it("create table with custom store", () => {
     const { getByTestId } = render(() => <StoreComponent />);
 
-    const custom = getByTestId('store-custom');
-    const customObj = getByTestId('store-customObj');
+    const custom = getByTestId("store-custom");
+    const customObj = getByTestId("store-customObj");
 
     expect(custom.textContent).toBe('"test"');
     expect(customObj.textContent).toBe('{"nested":"nested value"}');
 
-    fireEvent.click(getByTestId('update-btn'));
+    fireEvent.click(getByTestId("update-btn"));
     expect(custom.textContent).toBe('"changed"');
     expect(customObj.textContent).toBe('{"nested":"changed value"}');
 
-    fireEvent.click(getByTestId('delete-btn'));
+    fireEvent.click(getByTestId("delete-btn"));
     expect(custom.textContent).toBeFalsy();
     expect(customObj.textContent).toBeFalsy();
   });

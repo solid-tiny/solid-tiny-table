@@ -1,9 +1,9 @@
-import type { Accessor } from 'solid-js';
-import type { SetStoreFunction } from 'solid-js/store';
-import type { CoreCell, CoreColumn, CoreRow } from '../core/column';
-import type { CoreHeader } from '../core/headers';
-import type { ColumnDef } from './column-def';
-import type { RowData } from './row';
+import type { Accessor } from "solid-js";
+import type { SetStoreFunction } from "solid-js/store";
+import type { CoreCell, CoreColumn, CoreRow } from "../core/column";
+import type { CoreHeader } from "../core/headers";
+import type { ColumnDef } from "./column-def";
+import type { RowData } from "./row";
 
 export type TableStore = {
   [key: string]: unknown;
@@ -24,14 +24,14 @@ export type SolidTinyTableInstance<
       {
         data: TData[];
         columns: ColumnDef<TData, unknown>[];
-      } & Omit<TStore, 'data' | 'columns' | 'rows' | 'headers'>
+      } & Omit<TStore, "data" | "columns" | "rows" | "headers">
     >,
     {
       setState: SetStoreFunction<
         {
           data: TData[];
           columns: ColumnDef<TData, unknown>[];
-        } & Omit<TStore, 'data' | 'columns' | 'rows' | 'headers'>
+        } & Omit<TStore, "data" | "columns" | "rows" | "headers">
       >;
     },
   ];

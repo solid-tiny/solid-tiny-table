@@ -19,7 +19,6 @@
     "baseUrl": ".",
     "types": ["@solidjs/testing-library"]
   },
-
   "include": ["src/**/*", "test/**/*"],
   "exclude": ["node_modules", "dist"]
 }

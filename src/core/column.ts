@@ -1,19 +1,19 @@
-import type { JSX } from 'solid-js/jsx-runtime';
-import { isFn, isString } from 'solid-tiny-utils';
+import type { JSX } from "solid-js/jsx-runtime";
+import { isFn, isString } from "solid-tiny-utils";
 import type {
   AccessorColumnDef,
   ColumnDef,
   DisplayColumnDef,
-} from '../types/column-def';
+} from "../types/column-def";
 import type {
   SolidTinyTableCell,
   SolidTinyTableColumn,
   SolidTinyTableInstance,
   SolidTinyTableRow,
-} from '../types/core';
-import type { RowData } from '../types/row';
-import { getValueAtPath } from '../utils/object';
-import type { CoreHeader } from './headers';
+} from "../types/core";
+import type { RowData } from "../types/row";
+import { getValueAtPath } from "../utils/object";
+import type { CoreHeader } from "./headers";
 
 export type CoreColumn<TData extends RowData, TValue> = {
   columnDef: ColumnDef<TData, TValue>;
@@ -46,13 +46,13 @@ export function normalizeColumnDef<TData extends RowData, TValue>(
   table: SolidTinyTableInstance<TData, any>
 ): NormalizedColumnDef<TValue> {
   const getValue = () => {
-    if ('accessorKey' in columnDef && isString(columnDef.accessorKey)) {
+    if ("accessorKey" in columnDef && isString(columnDef.accessorKey)) {
       return getValueAtPath(data, columnDef.accessorKey) as TValue;
     }
-    if ('accessorFn' in columnDef && isFn(columnDef.accessorFn)) {
+    if ("accessorFn" in columnDef && isFn(columnDef.accessorFn)) {
       return columnDef.accessorFn(data) as TValue;
     }
-    return '' as TValue;
+    return "" as TValue;
   };
 
   const render = () => {

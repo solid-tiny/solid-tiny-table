@@ -1,25 +1,26 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any */
+/** biome-ignore-all lint/complexity/noBannedTypes: e */
 /** biome-ignore-all lint/correctness/noUnusedVariables: e */
 /** biome-ignore-all lint/suspicious/noEmptyInterface: e */
-import type { CellContext } from '../core/cell';
-import type { HeaderContext } from '../core/headers';
-import type { AccessorFn, RowData } from './row';
+import type { CellContext } from "../core/cell";
+import type { HeaderContext } from "../core/headers";
+import type { AccessorFn, RowData } from "./row";
 
-export interface IdIdentifier<TData extends RowData, TValue> {
+export type IdIdentifier<TData extends RowData, TValue> = {
   id: string;
   header?: StringOrTemplateHeader<TData, TValue>;
-}
+};
 
-export interface StringHeaderIdentifier {
+export type StringHeaderIdentifier = {
   header: string;
   id?: string;
-}
+};
 
 type ColumnIdentifiers<TData extends RowData, TValue> =
   | IdIdentifier<TData, TValue>
   | StringHeaderIdentifier;
 
-export interface ColumnMeta<TData extends RowData, TValue> {}
+export type ColumnMeta<TData extends RowData, TValue> = {};
 
 export type ColumnDefTemplate<TProps extends object> =
   | string
@@ -29,10 +30,10 @@ export type StringOrTemplateHeader<TData extends RowData, TValue> =
   | string
   | ColumnDefTemplate<HeaderContext<TData, TValue>>;
 
-export interface ColumnDefBase<TData extends RowData, TValue = unknown> {
+export type ColumnDefBase<TData extends RowData, TValue = unknown> = {
   cell?: ColumnDefTemplate<CellContext<TData, TValue>>;
   meta?: ColumnMeta<TData, TValue>;
-}
+};
 
 export interface IdentifiedColumnDef<TData extends RowData, TValue = unknown>
   extends ColumnDefBase<TData, TValue> {

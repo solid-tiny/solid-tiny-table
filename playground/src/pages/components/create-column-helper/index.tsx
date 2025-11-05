@@ -1,8 +1,8 @@
-import { createSignal, For } from 'solid-js';
-import { list, uid } from 'solid-tiny-utils';
-import { createColumnHelper } from '../../../../../src';
-import { createTable } from '../../../../../src/core/table';
-import { Button } from '../../../components/button';
+import { createSignal, For } from "solid-js";
+import { list, uid } from "solid-tiny-utils";
+import { createColumnHelper } from "../../../../../src";
+import { createTable } from "../../../../../src/core/table";
+import { Button } from "../../../components/button";
 
 type Person = {
   name: string;
@@ -32,31 +32,31 @@ export default function CreateColumnHelper() {
   const helper = createColumnHelper<Person>();
 
   const columns = [
-    helper.accessor('name', {
+    helper.accessor("name", {
       header: () => <strong>Name</strong>,
       meta: {
-        info: 'The name of the person',
+        info: "The name of the person",
       },
     }),
     helper.display({
-      id: 'info',
+      id: "info",
       header: () => <strong>Info</strong>,
       cell: (info) =>
         `${info.row.original.name} (${info.row.original.age} years old)`,
     }),
-    helper.accessor('age', {
+    helper.accessor("age", {
       header: () => <strong>Age</strong>,
     }),
-    helper.accessor('email', {
+    helper.accessor("email", {
       header: () => <strong>Email</strong>,
     }),
     helper.group({
-      header: 'address',
+      header: "address",
       columns: [
-        helper.accessor('address.street', {
+        helper.accessor("address.street", {
           header: () => <strong>Street</strong>,
         }),
-        helper.accessor('address.city', {
+        helper.accessor("address.city", {
           header: ({ table: t }) => (
             <strong>
               City
@@ -64,7 +64,7 @@ export default function CreateColumnHelper() {
             </strong>
           ),
         }),
-        helper.accessor('address.country', {
+        helper.accessor("address.country", {
           header: () => <strong>Country</strong>,
         }),
       ],
@@ -77,7 +77,7 @@ export default function CreateColumnHelper() {
     data,
     columns,
     store: {
-      custom: 'value',
+      custom: "value",
     },
   });
 
@@ -86,7 +86,7 @@ export default function CreateColumnHelper() {
       <Button
         onClick={() => {
           setData(genPersons());
-          table.ctx[1].setState('custom', 'new value');
+          table.ctx[1].setState("custom", "new value");
         }}
       >
         Change Data
@@ -101,7 +101,7 @@ export default function CreateColumnHelper() {
                     <td
                       class="b b-solid b-gray-200"
                       classList={{
-                        'bg-gray-100': cell.isLeaf,
+                        "bg-gray-100": cell.isLeaf,
                       }}
                       colSpan={cell.colSpan}
                       rowSpan={cell.rowSpan}
@@ -119,9 +119,7 @@ export default function CreateColumnHelper() {
             {(row) => (
               <tr>
                 <For each={row.getCells()}>
-                  {(cell) => {
-                    return <td>{cell.renderCell()}</td>;
-                  }}
+                  {(cell) => <td>{cell.renderCell()}</td>}
                 </For>
               </tr>
             )}

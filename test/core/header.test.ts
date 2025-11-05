@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { createColumnHelper } from '../../src';
-import { makeHeaders } from '../../src/core/headers';
+import { describe, expect, it } from "vitest";
+import { createColumnHelper } from "../../src";
+import { makeHeaders } from "../../src/core/headers";
 
 type Person = {
   name: string;
@@ -14,31 +14,30 @@ type Person = {
 
 const h = createColumnHelper<Person>();
 
-describe('Headers', () => {
-  it('make headers', () => {
+describe("Headers", () => {
+  it("make headers", () => {
     const columns = [
-      h.accessor('name', {
-        header: 'Name',
+      h.accessor("name", {
+        header: "Name",
       }),
-      h.accessor('age', {
-        header: 'Age',
+      h.accessor("age", {
+        header: "Age",
       }),
       h.group({
-        header: 'Address',
+        header: "Address",
         columns: [
-          h.accessor('address.street', {
-            header: 'Street',
+          h.accessor("address.street", {
+            header: "Street",
           }),
-          h.accessor('address.city', {
-            header: 'City',
+          h.accessor("address.city", {
+            header: "City",
           }),
-          h.accessor('address.country', {
-            header: 'Country',
+          h.accessor("address.country", {
+            header: "Country",
           }),
         ],
       }),
     ];
-    // biome-ignore lint/suspicious/noExplicitAny: any
     const headers = makeHeaders(columns, {} as any);
     expect(headers.length).toBe(2);
     expect(headers[0].length).toBe(3);

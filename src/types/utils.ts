@@ -3,9 +3,9 @@
 type ComputeRange<
   N extends number,
   Result extends unknown[] = [],
-> = Result['length'] extends N
+> = Result["length"] extends N
   ? Result
-  : ComputeRange<N, [...Result, Result['length']]>;
+  : ComputeRange<N, [...Result, Result["length"]]>;
 type Index40 = ComputeRange<40>[number];
 // Is this type a tuple?
 type IsTuple<T> = T extends readonly any[] & { length: infer Length }
@@ -22,10 +22,10 @@ type AllowedIndexes<
 > = Tuple extends readonly []
   ? Keys
   : Tuple extends readonly [infer _, ...infer Tail]
-    ? AllowedIndexes<Tail, Keys | Tail['length']>
+    ? AllowedIndexes<Tail, Keys | Tail["length"]>
     : Keys;
 
-export type DeepKeys<T, TDepth extends any[] = []> = TDepth['length'] extends 5
+export type DeepKeys<T, TDepth extends any[] = []> = TDepth["length"] extends 5
   ? never
   : unknown extends T
     ? string

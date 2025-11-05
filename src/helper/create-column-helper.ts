@@ -1,13 +1,13 @@
-import { isFn } from 'solid-tiny-utils';
+import { isFn } from "solid-tiny-utils";
 import type {
   AccessorFnColumnDef,
   AccessorKeyColumnDef,
   DisplayColumnDef,
   GroupColumnDef,
   IdentifiedColumnDef,
-} from '../types/column-def';
-import type { AccessorFn, RowData } from '../types/row';
-import type { DeepKeys, DeepValue } from '../types/utils';
+} from "../types/column-def";
+import type { AccessorFn, RowData } from "../types/row";
+import type { DeepKeys, DeepValue } from "../types/utils";
 
 export type ColumnHelper<TData extends RowData> = {
   accessor: <

@@ -1,11 +1,11 @@
-import { defineGlobalStore } from 'solid-tiny-context';
+import { defineGlobalStore } from "solid-tiny-context";
 
-const appState = defineGlobalStore('app-state', {
+const appState = defineGlobalStore("app-state", {
   state: () => ({
     isDark: false,
     hue: 165,
   }),
-  persist: 'localStorage',
+  persist: "localStorage",
 });
 
 export function useAppState() {
