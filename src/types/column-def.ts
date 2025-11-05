@@ -20,7 +20,8 @@ type ColumnIdentifiers<TData extends RowData, TValue> =
   | IdIdentifier<TData, TValue>
   | StringHeaderIdentifier;
 
-export type ColumnMeta<TData extends RowData, TValue> = {};
+// biome-ignore lint/style/useConsistentTypeDefinitions: can be extend by users
+export interface ColumnMeta<TData extends RowData, TValue> {}
 
 export type ColumnDefTemplate<TProps extends object> =
   | string
