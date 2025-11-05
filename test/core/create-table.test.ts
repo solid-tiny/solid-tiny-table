@@ -17,6 +17,7 @@ describe('createTable', () => {
       expect(table.rows()[0].table).toHaveProperty('ctx');
       expect(table.rows()[0].table).toHaveProperty('headers');
       expect(table.rows()[0].table).toHaveProperty('rows');
+      expect(table.rows()[0].index).toBe(0);
       dispose();
     });
   });

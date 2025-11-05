@@ -24,6 +24,7 @@ export type CoreRow<TData extends RowData, TValue = unknown> = {
   getCells: () => SolidTinyTableCell<TData, TValue>[];
   // biome-ignore lint/suspicious/noExplicitAny: for any
   table: SolidTinyTableInstance<TData, any>;
+  index: number;
 };
 
 export type CoreCell<TData extends RowData, TValue = unknown> = {
@@ -90,7 +91,7 @@ export function makeRows<TData extends RowData, TValue>(
   };
 
   const leafColumns = getLeafColumns();
-  const rows: SolidTinyTableRow<TData>[] = data.map((rowData) => {
+  const rows: SolidTinyTableRow<TData>[] = data.map((rowData, index) => {
     const row = {} as CoreRow<TData, TValue>;
     const cells: SolidTinyTableCell<TData, TValue>[] = leafColumns.map(
       (column) => {
@@ -105,6 +106,7 @@ export function makeRows<TData extends RowData, TValue>(
     row.getCells = () => cells;
     row.original = rowData;
     row.table = table;
+    row.index = index;
     return row;
   });
   return rows;
